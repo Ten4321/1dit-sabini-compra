@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #303030;
+}
+
+.map-container {
+    position: relative;
+    overflow: hidden; /* Hide overflow to create the zoom effect */
+}
+
+#world-map {
+    width: 100%; /* Set initial width */
+    transition: transform 3s ease; /* Animation duration for zooming */
+}
+
+.zoom {
+    transform: scale(3) translate(-1%, 15%); /* Adjust the zoom scale and position */
+}

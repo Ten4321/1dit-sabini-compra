@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microscope Invaders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #gameCanvas {
+            border: 2px solid #fff;
+            background-color: #222;
+        }
+
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2;
+            transition: opacity 0.5s ease;
+            opacity: 1;
+        }
+
+        #startButton, #restartButton {
+            padding: 10px 20px;
+            border: none;
+            background-color: #f00;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #startButton:hover, #restartButton:hover {
+            background-color: #c00;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        #backButton {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #f00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        #backButton:hover {
+            background-color: #c00;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="startScreen">
+        <h1>Microscope Invaders</h1>
+        <p>Sei uno scienziato! Spara ai microscopi che scendono dal cielo!</p>
+        <button id="startButton">Inizia il Gioco</button>
+    </div>
+
+    <div id="gameOverScreen" style="display:none;">
+        <h1>Game Over</h1>
+        <p id="finalScore">Punteggio Finale: 0</p>
+        <button id="restartButton">Rigioca</button>
+    </div>
+
+    <canvas id="gameCanvas" width="480" height="320"></canvas>
+    <div id="score">Punteggio: 0</div>
+
+    <button id="backButton" onclick="window.location.href='main.html'">Torna alla pagina precedente</button>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+        const scoreDisplay = document.getElementById('score');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        let score = 0;
+        let gameInterval;
+        let bullets = [];
+        let microscopes = [];
+        const microscopeSpeed = 1;
+        const microscopeInterval = 2000; // Cambiato per generare nemici ogni 2 secondi
+        const maxMicroscopes = 5; // Numero massimo di nemici sullo schermo
+
+        // Giocatore
+        const player = {
+            x: canvas.width / 2 - 15,
+            y: canvas.height - 30,
+            width: 30,
+            height: 30,
+            moveSpeed: 5
+        };
+
+        // Inizia il gioco
+        startButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', restartGame);
+
+        function startGame() {
+            startScreen.style.opacity = 0;
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                gameInterval = setInterval(updateGame, 30);
+                setInterval(spawnMicroscope, microscopeInterval);
+            }, 500);
+        }
+
+        function restartGame() {
+            gameOverScreen.style.display = 'none';
+            score = 0;
+            scoreDisplay.innerText = 'Punteggio: ' + score;
+            player.x = canvas.width / 2 - 15;
+            bullets = [];
+            microscopes = [];
+            gameInterval = setInterval(updateGame, 30);
+            setInterval(spawnMicroscope, microscopeInterval);
+        }
+
+        // Disegna il giocatore
+        function drawPlayer() {
+            ctx.fillStyle = '#00f'; // Blu per il giocatore
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        // Disegna i proiettili
+        function drawBullets() {
+            bullets.forEach(bullet => {
+                ctx.fillStyle = '#ff0'; // Giallo per i proiettili
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+        }
+
+        // Disegna i microscopi
+        function drawMicroscopes() {
+            microscopes.forEach(microscope => {
+                ctx.fillStyle = '#f00'; // Rosso per i microscopi
+                ctx.fillRect(microscope.x, microscope.y, microscope.width, microscope.height);
+            });
+        }
+
+        // Aggiorna il gioco
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Pulisci lo schermo
+            drawPlayer();
+            drawMicroscopes();
+            drawBullets();
+            updateMicroscopes();
+            updateBullets();
+            checkCollisions();
+            checkGameOver();
+        }
+
+        // Genera nuovi microscopi se non si supera il limite massimo
+        function spawnMicroscope() {
+            if (microscopes.length < maxMicroscopes) { // Limita il numero massimo di microscopi
+                const x = Math.random() * (canvas.width - 30);
+                microscopes.push({
+                    x: x,
+                    y: 0,
+                    width: 30,
+                    height: 30
+                });
+            }
+        }
+
+        // Aggiorna la posizione dei microscopi
+        function updateMicroscopes() {
+            microscopes.forEach(microscope => {
+                microscope.y += microscopeSpeed;
+            });
+
+            // Rimuovi i microscopi che escono dallo schermo
+            microscopes = microscopes.filter(microscope => microscope.y < canvas.height);
+        }
+
+        // Aggiorna la posizione dei proiettili
+        function updateBullets() {
+            bullets.forEach(bullet => {
+                bullet.y -= bullet.speed; // Muove il proiettile verso l'alto
+            });
+
+            // Rimuovi i proiettili che escono dallo schermo
+            bullets = bullets.filter(bullet => bullet.y > 0);
+        }
+
+        // Controlla le collisioni tra proiettili e microscopi
+        function checkCollisions() {
+            bullets.forEach((bullet, bulletIndex) => {
+                microscopes.forEach((microscope, microscopeIndex) => {
+                    if (
+                        bullet.x < microscope.x + microscope.width &&
+                        bullet.x + bullet.width > microscope.x &&
+                        bullet.y < microscope.y + microscope.height &&
+                        bullet.y + bullet.height > microscope.y
+                    ) {
+                        // Rimuove il proiettile e il microscopio in caso di collisione
+                        bullets.splice(bulletIndex, 1);
+                        microscopes.splice(microscopeIndex, 1);
+                        score++;
+                        scoreDisplay.innerText = 'Punteggio: ' + score;
+                    }
+                });
+            });
+        }
+
+        // Controlla le condizioni di game over
+        function checkGameOver() {
+            microscopes.forEach(microscope => {
+                if (microscope.y + microscope.height >= player.y) {
+                    clearInterval(gameInterval);
+                    showGameOverScreen();
+                }
+            });
+        }
+
+        // Mostra la schermata di Game Over
+        function showGameOverScreen() {
+            finalScoreDisplay.innerText = 'Punteggio Finale: ' + score;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        // Controlli di movimento
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft' && player.x > 0) {
+                player.x -= player.moveSpeed;
+            }
+            if (event.key === 'ArrowRight' && player.x < canvas.width - player.width) {
+                player.x += player.moveSpeed;
+            }
+            if (event.key === ' ') {
+                shootBullet();
+            }
+        });
+
+        // Funzione per sparare proiettili
+        function shootBullet() {
+            bullets.push({
+                x: player.x + player.width / 2 - 2,
+                y: player.y,
+                width: 5,
+                height: 10,
+                speed: 5
+            });
+        }
+    </script>
+</body>
+</html>

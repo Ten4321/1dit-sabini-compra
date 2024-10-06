@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microscopi Interattivi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+</head>
+<body>
+
+    <!-- Bottone provetta orizzontale -->
+    <div class="provetta-button-container">
+        <a href="minigioco.html" class="provetta-button">
+            <svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Parte cilindrica della provetta (orizzontale) -->
+                <rect x="20" y="30" width="260" height="40" rx="20" ry="20" fill="#2ecc71" stroke="#27ae60" stroke-width="3" />
+
+                <!-- Tappo della provetta -->
+                <rect x="0" y="25" width="30" height="50" rx="10" ry="10" fill="#27ae60" />
+
+                <!-- Bollicine animate all'interno della provetta -->
+                <circle cx="60" cy="50" r="5" fill="#fff" opacity="0.8">
+                    <animate attributeName="cy" from="50" to="35" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="100" cy="60" r="4" fill="#fff" opacity="0.7">
+                    <animate attributeName="cy" from="60" to="40" dur="2.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="140" cy="45" r="3" fill="#fff" opacity="0.9">
+                    <animate attributeName="cy" from="45" to="30" dur="4s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- Testo all'interno della provetta -->
+                <text x="150" y="55" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="16" font-family="Poppins">
+                    Prova il nostro minigioco
+                </text>
+            </svg>
+        </a>
+    </div>
+
+    <header>
+        <h1>Tutti i Microscopi: Scopri Come Funzionano!</h1>
+        <p>Un viaggio interattivo nel mondo dei microscopi: esplora modelli 3D, ascolta spiegazioni e guarda immagini.</p>
+    </header>
+
+    <!-- Sezione per i vari microscopi -->
+    <section id="microscopi">
+        <!-- Microscopio Ottico -->
+        <div class="microscopio">
+            <h2>Microscopio Ottico</h2>
+            <p>Il microscopio ottico usa la luce visibile per ingrandire immagini di oggetti molto piccoli.</p>
+            <div class="interattivo">
+                <!-- Modello 3D interattivo -->
+                <iframe src="https://sketchfab.com/models/a9c83e6af504463aa354e3b7e1b21c53/embed" frameborder="0" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+                <!-- Pulsante audio -->
+                <button class="audio-button" onclick="playAudio('audioOttico')">🔊 Spiegazione Audio</button>
+                <audio id="audioOttico" src="audio/p_29923647_620.mp3" preload="auto"></audio>
+            </div>
+        </div>
+
+        <!-- Microscopio Elettronico -->
+        <div class="microscopio">
+            <h2>Microscopio Elettronico</h2>
+            <p>Il microscopio elettronico utilizza fasci di elettroni per ottenere immagini ad altissima risoluzione.</p>
+            <div class="interattivo">
+                <iframe src="https://sketchfab.com/models/39d882d22227475a8e1ec8ba2a7cee6f/embed" frameborder="0" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+                <button class="audio-button" onclick="playAudio('audioElettronico')">🔊 Spiegazione Audio</button>
+                <audio id="audioElettronico" src="audio/p_29924228_79.mp3" preload="auto"></audio>
+            </div>
+        </div>
+
+        <!-- Microscopio a Scansione -->
+        <div class="microscopio">
+            <h2>Microscopio a Scansione</h2>
+            <p>Il microscopio a scansione crea immagini 3D tramite una sonda che scansiona la superficie dell'oggetto.</p>
+            <div class="interattivo">
+                <iframe src="https://sketchfab.com/models/f9521da839604ceca74c71d7dce21aec/embed" frameborder="0" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+                <button class="audio-button" onclick="playAudio('audioScansione')">🔊 Spiegazione Audio</button>
+                <audio id="audioScansione" src="audio/Audio WhatsApp 2024-10-04 ore 21.52.22_ea9ac14d.mp3" preload="auto"></audio>
+            </div>
+        </div>
+    </section>
+
+    <div id="audio-player">
+        <div class="audio-controls">
+            <button onclick="rewindAudio()"><i class="fas fa-undo"></i></button>
+            <button onclick="togglePlay()">
+                <i class="fas" id="play-icon">play</i>
+                <i class="fas" id="pause-icon" style="display:none;">pause</i>
+            </button>
+            <button onclick="fastForwardAudio()"><i class="fas fa-redo"></i></button>
+            <select id="audio-speed" class="audio-speed" onchange="changePlaybackSpeed()">
+                <option value="1">1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+            </select>
+            <button onclick="closePlayer()"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Progetto realizzato da Sabini Andrea & Compra Carl Mathew Compra - Classe 2DIT <br> @ Copyright 2024 Tutti Diritti riservati a Dxrk Services </p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

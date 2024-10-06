@@ -1,0 +1,234 @@
+/* Flashing effect */
+@keyframes flash {
+    0% {
+        background-color: white; /* Start with white */
+        opacity: 1; /* Fully visible */
+    }
+    50% {
+        background-color: #f4f4f4; /* Fades to original background color */
+        opacity: 0; /* Fully transparent */
+    }
+    100% {
+        background-color: #f4f4f4; /* Remain with original background color */
+        opacity: 1; /* Fully visible */
+    }
+}
+
+/* Stile bottone tema */
+.theme-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.5s ease, background-color 0.3s;
+}
+
+.theme-button:hover {
+    transform: scale(1.05);
+}
+
+.theme-button:active {
+    background-color: #3e8e41;
+}
+
+/* Tema scuro */
+body.dark-theme {
+    background-color: #121212;
+    color: white;
+}
+
+body.dark-theme .theme-button {
+    background-color: #BB86FC;
+    color: #121212;
+}
+
+body.dark-theme h1, body.dark-theme p {
+    color: white;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+    animation: flash 0.5s ease; /* Apply the flash animation */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #4A90E2;
+}
+
+p {
+    font-size: 1.1rem;
+}
+
+.microscopio {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease
+}
+
+.microscopio:hover {
+
+    transform: scale(1.02);
+
+}
+
+.microscopio h2 {
+    color: #4A90E2;
+    margin-bottom: 10px;
+}
+
+.interattivo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interattivo iframe {
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.audio-button {
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.audio-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(0, 123, 255, 0.6);
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9rem;
+}
+
+/* Audio player styles */
+#audio-player {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+    opacity: 0;
+    z-index: 100;
+}
+
+#audio-player.show {
+    display: block;
+    opacity: 1;
+}
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+}
+
+.audio-controls button {
+    margin: 0 5px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.audio-speed {
+    margin-left: 10px;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Notifica errore audio */
+.audio-error {
+    position: fixed;
+    top: 20px;
+    right: -400px; /* Parte fuori dallo schermo */
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: right 0.5s ease-in-out;
+}
+
+.audio-error i {
+    margin-right: 10px;
+}
+
+/* Animazione slide in */
+.audio-error.show {
+    right: 20px; /* Scivola dentro da destra */
+}
+
+/* Animazione slide out */
+.audio-error.hide {
+    right: -300px; /* Scivola fuori */
+}
+
+/* Stile per il bottone provetta */
+/* Stile per il bottone provetta orizzontale */
+/* Stile per il bottone provetta realistica */
+/* Stile per il bottone provetta orizzontale */
+.provetta-button-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.provetta-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.provetta-button:hover svg {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+.provetta-button svg {
+    transition: transform 0.2s ease;
+}
